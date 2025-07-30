@@ -1,46 +1,79 @@
-<!-- public/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Dynamixel Controller</title>
+  <title>Dynamixel PID Controller</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    input, button, select {
+      margin: 5px;
+    }
+    textarea {
+      margin-top: 10px;
+      width: 100%;
+      height: 150px;
+    }
+    #rotationWidget {
+      border: 1px solid #ccc;
+      margin-top: 10px;
+    }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <h2>Dynamixel PID Controller</h2>
 
-  <label>COM Port:</label>
+  <!-- COM 포트 선택 -->
+  <label for="comPorts">COM Port:</label>
   <select id="comPorts"></select>
   <button id="connectBtn">Connect</button>
   <button id="disconnectBtn">Disconnect</button>
 
   <hr>
 
-  <label>Target Position:</label>
+  <!-- 목표 위치 수동 입력 -->
+  <label for="targetInput">Target Position:</label>
   <input type="number" id="targetInput" />
   <button id="sendBtn">Send</button>
 
+  <!-- PID 계수 입력 -->
   <div>
-    <canvas id="rotationWidget" width="200" height="200"></canvas>
+    <label>P Gain:</label>
+    <input type="number" id="pGain" step="0.01" />
+    <label>I Gain:</label>
+    <input type="number" id="iGain" step="0.0001" />
+    <label>D Gain:</label>
+    <input type="number" id="dGain" step="0.0001" />
+    <button id="sendPID">Send PID</button>
   </div>
 
   <hr>
 
-  <label>P Gain:</label>
-  <input type="number" id="pGain" step="0.01" />
-  <label>I Gain:</label>
-  <input type="number" id="iGain" step="0.0001" />
-  <label>D Gain:</label>
-  <input type="number" id="dGain" step="0.0001" />
-  <button id="sendPID">Send PID</button>
+  <!-- 회전 위젯 -->
+  <h3>🎯 Rotation based position change</h3>
+  <canvas id="rotationWidget" width="250" height="250"></canvas>
 
   <hr>
 
-  <p>Current Position: <span id="currentPosition">---</span></p>
-  <p>Motor Status: <span id="motorStatus">Disconnected</span></p>
-  <textarea id="logBox" readonly rows="10" cols="50"></textarea>
+  <!-- 상태 표시 -->
+  <p>📍 Current Position: <span id="currentPosition">---</span></p>
+  <p>⚙️ Motor Status: <span id="motorStatus">Disconnected</span></p>
 
+  <!-- 로그 출력 -->
+  <textarea id="logBox" readonly></textarea>
+
+  <hr>
+  <h3>📈 Realtime position graph</h3>
+  <canvas id="positionChart" width="600" height="300"></canvas>
+
+  <!-- 스크립트 -->
   <script src="/socket.io/socket.io.js"></script>
   <script src="app.js"></script>
+
 </body>
 </html>
